@@ -1,0 +1,312 @@
+- shell :: command-line
+- emacs-lisp :: magit
+
+
+* intro
+
+- git :: DVCS (Distributed Version Control System)
+
+advantages of a VCS:
+- collaboration
+- storing/restoring versions
+- understanding changes
+- backup
+
+* basics
+
+** init
+
+- create =.git/=
+- create HEAD file referencing master (not explicit commit)
+
+#+BEGIN_SRC shell
+git init [<dir>]
+#+END_SRC
+(default =<dir>=: =.=)
+
+#+BEGIN_SRC emacs-lisp
+magit-init
+#+END_SRC
+
+** status
+
+displays paths in the working that:
+- untracked ::  not in index file (not ignored by .gitignore)
+- unstaged :: working tree state different from index virtual working tree state
+- staged :: index virtual working tree state different from HEAD referenced branch snapshot
+
+#+BEGIN_SRC shell
+git status
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+C-x g
+#+END_SRC
+
+- index is a binary file with file tracked and their hash to the objects, so it implement a virtual working tree state
+
+** track/stage
+
+update index to set paths:
+- untracked -> tracked
+- unstaged -> staged
+
+#+BEGIN_SRC shell
+git add <path>..
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+s: single
+S: all
+
+C-space: select hunk portion
+#+END_SRC
+
+** untrack/unstaged
+
+update index to set paths:
+- tracked -> untracked
+- staged -> unstaged
+
+#+BEGIN_SRC shell
+git reset HEAD <path>..
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+u: single
+U: all
+#+END_SRC
+
+** commit
+
+snapshot of the index changes and HEAD branch update
+
+#+BEGIN_SRC shell
+git commit
+git commit --amend
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+c c: commit
+c a: amend
+#+END_SRC
+
+- the amend option only update last commit
+
+** branch
+
+manage branches
+
+#+BEGIN_SRC shell
+git branch <branch>
+git branch -d <branch>: if merged
+git branch -D <branch>: if not merged
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+b c: create and checkout
+b k: delete branch
+#+END_SRC
+
+** checkout
+
+updates files in the working tree to match the version in the snapshot
+
+#+BEGIN_SRC shell
+git checkout <branch>
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+b b:
+#+END_SRC
+
+** merge
+
+merge the current branch with another
+
+#+BEGIN_SRC shell
+git merge <branch>
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+m m:
+#+END_SRC
+
+- 3-way merge :: resolve two branch last commit (commit, used for long running features)
+                 - no conflicts:
+                 - conflicts: solve conflicts row by row
+- fast forward :: update current branch to the newest (no commit, used for small features and bug fixes)
+                  - =--no-ff=: resolve fast forward as a 3-way merge
+
+* syncing
+
+** remote
+
+manage remote urls
+
+#+BEGIN_SRC shell
+git remote add <name> <url>
+git remote rm <url>
+git remote rename <old> <new>
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+magit-remote-...
+#+END_SRC
+
+** clone
+
+#+BEGIN_SRC shell
+git clone <url>
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+magit-clone
+#+END_SRC
+
+** push
+
+#+BEGIN_SRC shell
+git push [<remote> <branch>]
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+P p:
+#+END_SRC
+
+To prevent you from overwriting commits, git won’t let you push when it results in a non-fast-forward merge in the destination repository.
+If the remote history has diverged from your history, you need to pull the remote branch and merge it into your local one, then try pushing again.
+- =--force-with-lease= ensure none of your teammates have committed (use only for feature-branches).
+
+** fetch
+
+#+BEGIN_SRC shell
+git fetch [<remote> <branch>]
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+f p:
+#+END_SRC
+
+- pull :: fetch + merge
+
+* intermediate
+
+** stash
+
+#+BEGIN_SRC shell
+git stash: only tracked
+git stash -u: also untracked
+git stash -a: also untracked and ignored
+
+git stash pop
+git stash apply
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+z z: save
+z p: pop
+z a: apply
+#+END_SRC
+
+** rebase
+
+apply commits of current branch to the head of another
+
+#+BEGIN_SRC shell
+git rebase <branch>
+git rebase -i <branch>
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+r e:
+r i:
+#+END_SRC
+
+interactively permit to manage history of commit: squashing, fixuping, deleting, ordering..
+- =--autostash= in order: stash, rebase, and stash pop uncomminted changes
+
+** tag
+
+naming convention =v0.0.1=
+
+#+BEGIN_SRC shell
+git tag <tag>
+git push origin --tags
+
+git tag -d <tag>
+git push origin :<tag>
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+t t:
+P t:
+
+t k:
+t p:
+#+END_SRC
+
+* undoing
+
+** revert
+
+revert a single commit
+
+#+BEGIN_SRC shell
+git revert <commit>..
+git revert -n <commit>: add the inverse changes to the current working director and index
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+V V:
+v
+#+END_SRC
+
+** reset
+
+reset the history
+
+#+BEGIN_SRC shell
+git reset ..
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+X ..
+#+END_SRC
+
+- soft :: HEAD
+- mixed :: HEAD, index (default)
+- hard :: HEAD, index, working tree
+
+- =HEAD^n= specify which parent follow.
+- =HEAD~n= specify for how many. 
+(characters can be combined, e.g. =HEAD^2~3=)
+
+* logging
+
+*** reflog
+
+#+BEGIN_SRC shell
+git reflog
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+l H:
+#+END_SRC
+
+- =git checkout HEAD@{n}= to recall a state
+
+* chunks
+
+chunks can be managed from =magit-status=
+
+#+BEGIN_SRC emacs-lisp
+C-SPC: (arrows to expand region)
+
+s: stage
+u: unstage
+
+k: discard
+v: revert
+#+END_SRC
+ 
