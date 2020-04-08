@@ -225,7 +225,7 @@ r i:
 #+END_EXAMPLE
 
 interactively permit to manage history of commit: squashing, fixuping, deleting, ordering..
-- =--autostash= in order: stash, rebase, and stash pop uncomminted changes
+- =--autostash= in order: stash, rebase, and stash pop uncommitted changes
 
 ** tag
 
@@ -260,7 +260,7 @@ git revert -n <commit>: add the inverse changes to the current working director 
 
 #+BEGIN_EXAMPLE
 V V:
-v
+v:
 #+END_EXAMPLE
 
 ** reset
