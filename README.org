@@ -17,7 +17,7 @@ advantages of a VCS:
 ** init
 
 - create =.git/=
-- create HEAD file referencing master (not explicit commit)
+- create HEAD file referencing master (no commit)
 
 #+BEGIN_EXAMPLE
 git init [<dir>]
@@ -27,11 +27,9 @@ git init [<dir>]
 magit-init
 #+END_EXAMPLE
 
-- if not specified, current =<dir>= is considered
-
 ** status
 
-displays paths in the working that:
+displays paths that:
 - untracked ::  not in index file (not ignored by .gitignore)
 - unstaged :: working tree state different from index virtual working tree state
 - staged :: index virtual working tree state different from HEAD referenced branch snapshot
@@ -44,13 +42,9 @@ git status
 C-x g
 #+END_EXAMPLE
 
-- index is a binary file with file tracked and their hash to the objects, so it implement a virtual working tree state
+** stage
 
-** track/stage
-
-update index to set paths:
-- untracked -> tracked
-- unstaged -> staged
+update index to set paths to staged
 
 #+BEGIN_EXAMPLE
 git add <path>..
@@ -59,15 +53,11 @@ git add <path>..
 #+BEGIN_EXAMPLE
 s: single
 S: all
-
-C-space: select hunk portion
 #+END_EXAMPLE
 
-** untrack/unstaged
+** unstage
 
-update index to set paths:
-- tracked -> untracked
-- staged -> unstaged
+update index to set paths to untracked/unstaged
 
 #+BEGIN_EXAMPLE
 git reset HEAD <path>..
@@ -133,11 +123,8 @@ git merge <branch>
 m m:
 #+END_EXAMPLE
 
-- 3-way merge :: resolve two branch last commit (commit, used for long running features)
-                 - no conflicts:
-                 - conflicts: solve conflicts row by row
-- fast forward :: update current branch to the newest (no commit, used for small features and bug fixes)
-                  - =--no-ff=: resolve fast forward as a 3-way merge
+- fast forward :: update current branch to the newest, no commit
+- 3-way merge :: resolve two branch last commits in a new commit in which conflicts are solved row by row
 
 * syncing
 
@@ -175,9 +162,10 @@ git push [<remote> <branch>]
 P p:
 #+END_EXAMPLE
 
-To prevent you from overwriting commits, git won’t let you push when it results in a non-fast-forward merge in the destination repository.
-If the remote history has diverged from your history, you need to pull the remote branch and merge it into your local one, then try pushing again.
-- =--force-with-lease= ensure none of your teammates have committed (use only for feature-branches).
+to prevent you from overwriting commits, git won’t let you push when it results in a non fast-forward merge in the destination repository.
+- =--force-with-lease= force push ensuring none of your teammates have committe
+
+/if the remote history has diverged from your history, you need to fetch the remote branch and merge it into your local one, then try pushing again./
 
 ** fetch
 
@@ -251,11 +239,11 @@ t p:
 
 ** revert
 
-revert a single commit
+apply reverse changes
 
 #+BEGIN_EXAMPLE
 git revert <commit>..
-git revert -n <commit>: add the inverse changes to the current working director and index
+git revert -n <commit>: no commit (change only working directory and index)
 #+END_EXAMPLE
 
 #+BEGIN_EXAMPLE
@@ -279,13 +267,15 @@ X ..
 - mixed :: HEAD, index (default)
 - hard :: HEAD, index, working tree
 
-- =HEAD^n= specify which parent follow.
-- =HEAD~n= specify for how many. 
+- =HEAD^n= specify which parent follow
+- =HEAD~n= specify for how many
 (characters can be combined, e.g. =HEAD^2~3=)
 
 * logging
 
-*** reflog
+log the working file =magit-log-buffer-file=
+
+** reflog
 
 #+BEGIN_EXAMPLE
 git reflog
@@ -295,15 +285,13 @@ git reflog
 l H:
 #+END_EXAMPLE
 
-- =git checkout HEAD@{n}= to recall a state
+- checkout =HEAD@{n}= to recall a state
 
 * chunks
 
 chunks can be managed from =magit-status=
 
 #+BEGIN_EXAMPLE
-C-SPC: (arrows to expand region)
-
 s: stage
 u: unstage
 
