@@ -269,7 +269,7 @@ X ..
 
 - =HEAD^n= specify which parent follow
 - =HEAD~n= specify for how many
-(characters can be combined, e.g. =HEAD^2~3=)
+(characters can be combined: =HEAD^x~y=)
 
 * logging
 
