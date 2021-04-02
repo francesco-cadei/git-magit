@@ -213,7 +213,7 @@ r i:
 #+END_EXAMPLE
 
 interactively permit to manage history of commit: squashing, fixuping, deleting, ordering..
-- =--autostash= in order: stash, rebase, and stash pop uncommitted changes
+- =--autostash= in order: stash, rebase and stash pop uncommitted changes
 
 ** tag
 
@@ -267,6 +267,8 @@ X ..
 - mixed :: HEAD, index (default)
 - hard :: HEAD, index, working tree
 
+navigation:
+
 - =HEAD^n= specify which parent follow
 - =HEAD~n= specify for how many
 (characters can be combined: =HEAD^x~y=)
@@ -298,4 +300,3 @@ u: unstage
 k: discard
 v: revert
 #+END_EXAMPLE
- 
