@@ -2,9 +2,10 @@
 first example is for *git* (command-line), second is for *magit*
 #+end_quote
 
-* intro
 
+* intro
 - git :: DVCS (Distributed Version Control System)
+
 
 advantages of a VCS:
 - collaboration
@@ -12,81 +13,94 @@ advantages of a VCS:
 - understanding changes
 - backup
 
+
 * basics
-
 ** init
-
 - create =.git/=
 - create HEAD file referencing master (no commit)
+
 
 #+begin_example
 git init [<dir>]
 #+end_example
 
+
 #+begin_example
 magit-init
 #+end_example
 
-** status
 
+** status
 displays paths that:
 - untracked ::  not in index file (not ignored by .gitignore)
-- unstaged :: working tree state different from index virtual working tree state
-- staged :: index virtual working tree state different from HEAD referenced branch snapshot
+- unstaged :: working tree state different from index virtual working
+  tree state
+- staged :: index virtual working tree state different from HEAD referenced
+  branch snapshot
+
 
 #+begin_example
 git status
 #+end_example
 
+
 #+begin_example
 C-x g
 #+end_example
 
-** stage
 
+** stage
 update index to set paths to staged
+
 
 #+begin_example
 git add <path>..
 #+end_example
+
 
 #+begin_example
 s: single
 S: all
 #+end_example
 
-** unstage
 
+** unstage
 update index to set paths to untracked/unstaged
+
 
 #+begin_example
 git reset HEAD <path>..
 #+end_example
+
 
 #+begin_example
 u: single
 U: all
 #+end_example
 
-** commit
 
+** commit
 snapshot of the index changes and HEAD branch update
+
 
 #+begin_example
 git commit
 git commit --amend
 #+end_example
 
+
 #+begin_example
 c c: commit
 c a: amend
 #+end_example
 
+
 - the amend option only update last commit
 
-** branch
 
+** branch
 manage branches
+
 
 #+begin_example
 git branch <branch>
@@ -94,43 +108,50 @@ git branch -d <branch>: if merged
 git branch -D <branch>: if not merged
 #+end_example
 
+
 #+begin_example
 b c: create and checkout
 b k: delete branch
 #+end_example
 
-** checkout
 
+** checkout
 updates files in the working tree to match the version in the snapshot
+
 
 #+begin_example
 git checkout <branch>
 #+end_example
 
+
 #+begin_example
 b b:
 #+end_example
 
-** merge
 
+** merge
 merge the current branch with another
+
 
 #+begin_example
 git merge <branch>
 #+end_example
 
+
 #+begin_example
 m m:
 #+end_example
 
+
 - fast forward :: update current branch to the newest, no commit
-- 3-way merge :: resolve two branch last commits in a new commit in which conflicts are solved row by row
+- 3-way merge :: resolve two branch last commits in a new commit in which
+  conflicts are solved row by row
+
 
 * syncing
-
 ** remote
-
 manage remote urls
+
 
 #+begin_example
 git remote add <name> <url>
@@ -138,51 +159,60 @@ git remote rm <url>
 git remote rename <old> <new>
 #+end_example
 
+
 #+begin_example
 magit-remote-...
 #+end_example
 
-** clone
 
+** clone
 #+begin_example
 git clone <url>
 #+end_example
+
 
 #+begin_example
 magit-clone
 #+end_example
 
-** push
 
+** push
 #+begin_example
 git push [<remote> <branch>]
 #+end_example
+
 
 #+begin_example
 P p:
 #+end_example
 
-to prevent you from overwriting commits, git won’t let you push when it results in a non fast-forward merge in the destination repository.
-- =--force-with-lease= force push ensuring none of your teammates have committe
 
-/if the remote history has diverged from your history, you need to fetch the remote branch and merge it into your local one, then try pushing again./
+to prevent you from overwriting commits, git won’t let you push when it results
+in a non fast-forward merge in the destination repository.
+- =--force-with-lease= force push ensuring none of your teammates have
+  committed
+
+
+/if the remote history has diverged from your history, you need to fetch the
+remote branch and merge it into your local one, then try pushing again./
+
 
 ** fetch
-
 #+begin_example
 git fetch [<remote> <branch>]
 #+end_example
+
 
 #+begin_example
 f p:
 #+end_example
 
+
 - pull :: fetch + merge
 
+
 * intermediate
-
 ** stash
-
 #+begin_example
 git stash: only tracked
 git stash -u: also untracked
@@ -192,32 +222,38 @@ git stash pop
 git stash apply
 #+end_example
 
+
 #+begin_example
 z z: save
 z p: pop
 z a: apply
 #+end_example
 
-** rebase
 
+** rebase
 apply commits of current branch to the head of another
+
 
 #+begin_example
 git rebase <branch>
 git rebase -i <branch>
 #+end_example
 
+
 #+begin_example
 r e:
 r i:
 #+end_example
 
-interactively permit to manage history of commit: squashing, fixuping, deleting, ordering..
+
+interactively permit to manage history of commit: squashing, fixuping,
+deleting, ordering..
 - =--autostash= in order: stash, rebase and stash pop uncommitted changes
 
-** tag
 
+** tag
 naming convention =v0.0.1=
+
 
 #+begin_example
 git tag <tag>
@@ -227,6 +263,7 @@ git tag -d <tag>
 git push origin :<tag>
 #+end_example
 
+
 #+begin_example
 t t:
 P t:
@@ -235,63 +272,68 @@ t k:
 t p:
 #+end_example
 
+
 * undoing
-
 ** revert
-
 apply reverse changes
+
 
 #+begin_example
 git revert <commit>..
 git revert -n <commit>: no commit (change only working directory and index)
 #+end_example
 
+
 #+begin_example
 V V:
 v:
 #+end_example
 
-** reset
 
+** reset
 reset the history
+
 
 #+begin_example
 git reset ..
 #+end_example
 
+
 #+begin_example
 X ..
 #+end_example
+
 
 - soft :: HEAD
 - mixed :: HEAD, index (default)
 - hard :: HEAD, index, working tree
 
-navigation:
 
+navigation:
 - =HEAD^n= specify which parent follow
 - =HEAD~n= specify for how many
 (characters can be combined: =HEAD^x~y=)
 
+
 * logging
-
 log the working file =magit-log-buffer-file=
-
 ** reflog
-
 #+begin_example
 git reflog
 #+end_example
+
 
 #+begin_example
 l H:
 #+end_example
 
+
 - checkout =HEAD@{n}= to recall a state
 
-* chunks
 
+* chunks
 chunks can be managed from =magit-status=
+
 
 #+begin_example
 s: stage
