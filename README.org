@@ -45,7 +45,7 @@ git status
 
 
 #+begin_example
-C-x g
+C-x m
 #+end_example
 
 
